@@ -41,7 +41,7 @@ function convertInJson(csv) {
 }
 
 async function saveNewJson(table) {
-    const resp = await fetch("../source/perguntas.json")
+    const resp = await fetch("../_Perguntas/perguntas.json")
     let jsonData = await resp.json()
 
     jsonData = table;

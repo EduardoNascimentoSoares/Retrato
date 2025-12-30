@@ -1,37 +1,130 @@
-// - Arrumar a pasta óbvia pro Fafa
-// - Evitar que a mesma pergunta possa aparecer mais de uma vez (provavelmente vai ter q usar localstorage)
 // - Fazer verificação das respostas (se ta correta, se foram todas as dicas, quantas casas pode andar)
-// - Impedir que uma dica volte a ser oculta
 
-window.addEventListener("load", async () => {
-    const resp = await fetch("../source/perguntas.json")
-    const perguntas = await resp.json()
+const jogador = 0
+const pontos = { valor: 10, jogador: 0 }
 
-    const indexQuest = Math.floor(Math.random() * (perguntas.length))
+window.addEventListener("load", loadQuestions)
 
-    let quest = perguntas[indexQuest]
-
-    const categoria = document.getElementById("categoria")
-    const resposta = document.getElementById("resposta")
-    categoria.textContent = quest["Categoria"]
-    resposta.textContent = quest["Resposta"]
-    
-    const nums = [1,2,3,4,5,6,7,8,9,10]
-    for(let i = 1; i <= 10; i++){
-        const dica = document.getElementById(`dica${i}`)
-        if(!dica) continue
-
-        const index = Math.floor(Math.random() * nums.length)
-        const r = nums.splice(index, 1)[0]
-
-        dica.textContent = quest[`Dica${r}`]
-    }
+document.addEventListener("keydown", e => {
+  if (e.key === "Enter") { isCorrect() }
 })
 
-const spans = document.querySelectorAll("span")
+const chute = document.querySelector("button#btnResp")
+chute.addEventListener("click", isCorrect)
 
-  spans.forEach(span => {
-    span.addEventListener("click", () => {
-      span.classList.toggle("oculto");
-    });
-  });
+async function getQuestions() {
+  const resp = await fetch("../_Perguntas/perguntas.json")
+  const perguntas = await resp.json()
+  let sortedJson = JSON.parse(localStorage.getItem("sorted"))
+
+  if (!sortedJson) {
+    const s = Array.from(
+      { length: perguntas.length },
+      (_, index) => index
+    )
+
+    s.sort(() => Math.random() - 0.5)
+
+    localStorage.setItem("sorted", JSON.stringify(s))
+    sortedJson = s
+  }
+
+  localStorage.setItem("indexQuest", JSON.stringify(sortedJson[0]))
+  localStorage.setItem("json", JSON.stringify(perguntas))
+
+  return perguntas[sortedJson[0]]
+}
+
+async function loadQuestions() {
+  const quest = await getQuestions()
+  const categoria = document.getElementById("categoria")
+  const resposta = document.getElementById("resposta")
+
+  categoria.textContent = quest["Categoria"]
+  resposta.textContent = quest["Resposta"]
+  updatePoints(true)
+
+  const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  for (let i = 1; i <= 10; i++) {
+    const dica = document.getElementById(`dica${i}`)
+    if (!dica) continue
+
+    const index = Math.floor(Math.random() * nums.length)
+    const r = nums.splice(index, 1)[0]
+
+    dica.textContent = quest[`Dica${r}`]
+  }
+}
+
+function reveal(i) {
+  i
+}
+
+function isCorrect() {
+  const input = document.getElementById("chute")
+  const kick = input.value.trim().toLowerCase()
+  const i = JSON.parse(localStorage.getItem("indexQuest"))
+  const json = JSON.parse(localStorage.getItem("json"))
+  const resp = json[i]["Resposta"].toLowerCase().trim()
+
+  let list = JSON.parse(localStorage.getItem("sorted"))
+
+  input.value = " "
+
+  if (kick === resp) {
+    alert("acertooou")
+    list.shift()
+    localStorage.setItem("sorted", JSON.stringify(list))
+
+    location.href = "../pages/tabuleiro.html"
+    return
+  }
+
+  if (pontos["valor"] === 1) {
+    list.shift()
+    localStorage.setItem("sorted", JSON.stringify(list))
+    gameOver()
+    return
+  }
+
+  alert("Errou hahaha")
+  updatePoints()
+  console.log(pontos);
+}
+
+function updatePoints(i = false) {
+  let pointText = document.querySelector("p#tabelaPontos")
+  if (!i) {
+    pontos["valor"] -= 1
+  }
+  pointText.textContent = pontos["valor"]
+}
+
+function gameOver() {
+  alert("perdeu a vez")
+  location.href = "../pages/tabuleiro.html"
+}
+
+const spans = document.querySelectorAll("span")
+spans.forEach(span => {
+  span.addEventListener("click", () => {
+    span.classList.remove("oculto")
+
+    updatePoints()
+
+    if (pontos["valor"] === 0) gameOver()
+  }, { once: true });
+});
+
+const resposta = document.querySelector("p#resposta")
+resposta.addEventListener("click", r => {
+  r.currentTarget.classList.remove("oculto")
+
+  let list = JSON.parse(localStorage.getItem("sorted"))
+  list.shift()
+  localStorage.setItem("sorted", JSON.stringify(list))
+  
+  gameOver()
+
+  alert(`A resposta era ${resposta.textContent}`)
+})
