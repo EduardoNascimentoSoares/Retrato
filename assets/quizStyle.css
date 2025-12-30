@@ -1,0 +1,9 @@
+.oculto {
+    background-color: black
+}
+
+span {
+    margin: 6px 10px;
+    cursor: pointer;
+    display: inline-block;
+}
