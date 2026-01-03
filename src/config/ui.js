@@ -28,6 +28,6 @@ export function showMessage(msg) {
   alert(msg)
 }
 
-export function redirectTabuleiro() {
-  location.href = "../pages/tabuleiro.html"
+export function redirectboard() {
+  location.href = "../pages/board.html"
 }

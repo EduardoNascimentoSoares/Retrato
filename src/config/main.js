@@ -19,7 +19,7 @@ import {
   updatePointsUI,
   reveal,
   showMessage,
-  redirectTabuleiro
+  redirectboard
 } from "./ui.js"
 
 import { clearQuizState } from "./storage.js"
@@ -103,5 +103,5 @@ function bindRevealAnswer() {
 function endRound() {
   clearQuizState()
   advanceQuestion()
-  redirectTabuleiro()
+  redirectboard()
 }
