@@ -4,7 +4,9 @@ import {
   generateQuestionOrder,
   getCurrentQuestion,
   advanceQuestion,
-  generateTipOrder
+  generateTipOrder,
+  changePlayer,
+  setPlayer
 } from "./questions.js"
 
 import {
@@ -21,6 +23,8 @@ import {
   showMessage,
   redirectboard
 } from "./ui.js"
+
+import { clear } from "./storage.js"
 
 window.addEventListener("load", init)
 
@@ -42,8 +46,12 @@ async function init() {
   renderTips(question)
   updatePointsUI()
 
+  setPlayer()
+
   bindTips()
   bindRevealAnswer()
+  
+  
 }
 
 function handleAnswer() {
@@ -51,22 +59,17 @@ function handleAnswer() {
   const kick = input.value
   input.value = ""
 
+
   const question = getCurrentQuestion()
 
   if (checkAnswer(kick, question.Resposta)) {
     showMessage("Acertou!")
     endRound()
+    updatePointsUI()
     return
-  }
-
-  losePoint()
-  updatePointsUI()
-
-  if (gameState.pontos === 0) {
-    showMessage("Perdeu a vez!")
-    endRound()
   } else {
-    showMessage("Errou 😅")
+      changePlayer()
+      showMessage("Errou 😅")
   }
 }
 
@@ -80,8 +83,10 @@ function bindTips() {
       losePoint()
       updatePointsUI()
 
-      if (gameState.pontos === 0) {
-        showMessage("Perdeu a vez!")
+      const question = getCurrentQuestion()
+
+      if (gameState.points === 0) {
+        showMessage(`A resposta era ${question.Resposta}`)
         endRound()
       }
     }, { once: true })

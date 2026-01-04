@@ -1,13 +1,17 @@
 export const gameState = {
-  pontos: 10,
-  posicaoJogador: [],
+  points: 10,
+  actualPlayer: 0,
+  totalPlayers: 6,
 
-  perguntas: [],
-  ordemPerguntas: [],
-  indiceAtual: null,
+  questionsJson: [],
+  questionsOrder: [],
+  questionIndex: null,
 
   tipOrder: [],
   revealedTips: [],
 
-  armadilhas: []
+  traps: []
 }
+
+// tem que ser  de 2 a 6 grupos
+// tem q ciclar o jogador

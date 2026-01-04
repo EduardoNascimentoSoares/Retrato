@@ -10,10 +10,10 @@ export function checkAnswer(kick, answer) {
 }
 
 export function losePoint() {
-  gameState.pontos--
+  gameState.points--
   persistQuizState()
 }
 
 export function resetPoints() {
-  gameState.pontos = 10
+  gameState.points = 10
 }

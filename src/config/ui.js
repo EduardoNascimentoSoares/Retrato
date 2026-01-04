@@ -17,7 +17,7 @@ export function renderTips(question) {
 }
 
 export function updatePointsUI() {
-  document.getElementById("tabelaPontos").textContent = gameState.pontos
+  document.getElementById("tabelapoints").textContent = gameState.points
 }
 
 export function reveal(el) {

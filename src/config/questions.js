@@ -1,11 +1,11 @@
 import { gameState } from "./state.js"
-import { save, load} from "./storage.js"
+import { save, load } from "./storage.js"
 
 export async function loadQuestions() {
-  if (gameState.perguntas.length) return
+  if (gameState.questionsJson.length) return
 
   const resp = await fetch("../_Perguntas/perguntas.json")
-  gameState.perguntas = await resp.json()
+  gameState.questionsJson = await resp.json()
 }
 
 export function generateQuestionOrder() {
@@ -13,24 +13,24 @@ export function generateQuestionOrder() {
 
   if (!order) {
     order = Array.from(
-      { length: gameState.perguntas.length },
+      { length: gameState.questionsJson.length },
       (_, i) => i
     ).sort(() => Math.random() - 0.5)
 
     save("sorted", order)
   }
 
-  gameState.ordemPerguntas = order
-  gameState.indiceAtual = order[0]
+  gameState.questionsOrder = order
+  gameState.questionIndex = order[0]
 }
 
 export function getCurrentQuestion() {
-  return gameState.perguntas[gameState.indiceAtual]
+  return gameState.questionsJson[gameState.questionIndex]
 }
 
 export function advanceQuestion() {
-  gameState.ordemPerguntas.shift()
-  save("sorted", gameState.ordemPerguntas)
+  gameState.questionsOrder.shift()
+  save("sorted", gameState.questionsOrder)
 }
 
 export function generateTipOrder() {
@@ -39,7 +39,7 @@ export function generateTipOrder() {
   if (saved?.tipOrder) {
     gameState.tipOrder = saved.tipOrder
     gameState.revealedTips = saved.revealedTips || []
-    gameState.pontos = saved.pontos
+    gameState.points = saved.points
     return
   }
 
@@ -54,8 +54,28 @@ export function persistQuizState() {
   save("quizzState", {
     tipOrder: gameState.tipOrder,
     revealedTips: gameState.revealedTips,
-    pontos: gameState.pontos
+    points: gameState.points
   })
 }
 
+export function setPlayer() {
+  const span = document.getElementById("jogador")
+  span.textContent = gameState.actualPlayer
+}
 
+export function changePlayer() {
+  if (gameState.actualPlayer < gameState.totalPlayers) {
+    gameState.actualPlayer++
+  } else {
+    gameState.actualPlayer = 0
+  }
+  
+  setPlayer()
+}
+
+
+export function generateTrapas() {
+  // Perca Sua vez
+  // Avance ou volte "x"
+  // Escolha um jogador para avançar ou voltar "x"
+}
