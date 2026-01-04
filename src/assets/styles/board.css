@@ -29,3 +29,45 @@ body {
     transform: translate(-50%, -50%); /* Centraliza o pino na coordenada */
     z-index: 10;
 }
+
+/* Botão flutuante no canto da tela */
+.debug-btn {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    font-size: 20px;
+    z-index: 1000; /* Garante que fique acima de tudo */
+    cursor: pointer;
+}
+
+/* O Painel */
+.painel-debug {
+    position: fixed;
+    bottom: 50px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.9); /* Fundo escuro semitransparente */
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    width: 200px;
+    z-index: 1000;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    font-family: monospace;
+}
+
+/* Classe utilitária para esconder elementos */
+.hidden {
+    display: none;
+}
+
+.debug-section {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.debug-actions {
+    display: flex;
+    gap: 5px;
+    margin-top: 10px;
+}

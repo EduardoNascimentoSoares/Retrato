@@ -5,7 +5,8 @@ let players = [
     { id: 1, name: "Blue",   color: "#0000ff", currentTile: 0 },
     { id: 2, name: "Green",  color: "#008000", currentTile: 0 },
     { id: 3, name: "Yellow", color: "#ffd700", currentTile: 0 },
-    { id: 4, name: "Black",  color: "#000000", currentTile: 0 }
+    { id: 4, name: "Black",  color: "#000000", currentTile: 0 },
+    { id: 5, name: "Purple", color: "#800080", currentTile: 0 }
 ];
 
 const boardContainer = document.getElementById('board-container');
@@ -65,10 +66,16 @@ function movePlayer(playerId, steps) {
     if (player) {
         player.currentTile += steps;
 
+        //TODO: salvar no localStorage a posiçao dos players
+
         if (player.currentTile >= tileCoordinates.length - 1) {
             player.currentTile = tileCoordinates.length - 1;
-            console.log(`Player ${player.name} WINS!`);
-            alert(`${player.name} WINS!`);
+
+            //TODO: chamar a funçao de final de jogo
+        }
+
+        if (player.currentTile < 0) {
+            player.currentTile = 0;
         }
         
         updateVisualPositions();

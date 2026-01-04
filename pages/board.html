@@ -13,7 +13,30 @@
         <img src="../src/assets/image/board.png" alt="" id="board-image">
     </div>
     <a href="quiz.html">Quiz</a>
+
+
+    <button id="btn-toggle-debug" class="debug-btn">🐛</button>
+
+    <div id="painel-debug" class="painel-debug hidden">
+        <h3>Painel de Controle</h3>
+
+        <div class="debug-section">
+            <label>Jogador (ID):</label>
+            <input type="number" id="debug-player-id" min="0" max="4" value="0">
+
+            <label>Passos:</label>
+            <input type="number" id="debug-steps" value="1">
+
+            <div class="debug-actions">
+                <button onclick="debugMover(1)">Avançar</button>
+                <button onclick="debugMover(-1)">Voltar</button>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 <script src="../src/config/boardConfig.js"></script>
+<script src="../src/config/debugPainel.js"></script>
+
 </html>
