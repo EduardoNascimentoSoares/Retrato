@@ -4,9 +4,28 @@ body {
     justify-content: center;
     align-items: center;
     background-color: #f0f0f0;
-}   
+} 
 
-.board {
-    width: auto;
-    height: 95vh;
+#board-container {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    display: inline-block;
+}
+
+#board-image {
+    width: 100%;
+    display: block;
+}
+
+.pawn {
+    width: 25px;  /* Ajuste conforme o tamanho do seu tabuleiro */
+    height: 25px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    position: absolute;
+    transition: top 0.5s ease-in-out, left 0.5s ease-in-out; 
+    transform: translate(-50%, -50%); /* Centraliza o pino na coordenada */
+    z-index: 10;
 }
