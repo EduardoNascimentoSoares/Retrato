@@ -1,7 +1,49 @@
-const input = document.getElementById("inputFile")
-const btn = document.getElementById("btnSend")
-const output = document.getElementById("output")
+const input = document.getElementById("inputFile");
+const btn = document.getElementById("btnSend");
+const output = document.getElementById("output");
+const dropZone = document.getElementById("dropZone");
+const fileNameDisplay = document.getElementById("fileName");
 
+// Drag and Drop functionality
+dropZone.addEventListener('click', () => input.click());
+
+dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('drag-active');
+});
+
+dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('drag-active');
+});
+
+dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-active');
+
+    if (e.dataTransfer.files.length) {
+        const file = e.dataTransfer.files[0];
+        
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        input.files = dataTransfer.files;
+
+        updateUI(file.name);
+    }
+});
+
+input.addEventListener('change', () => {
+    if (input.files.length) {
+        updateUI(input.files[0].name);
+    }
+});
+
+function updateUI(name) {
+    fileNameDisplay.textContent = `Arquivo: ${name}`;
+    output.textContent = "";
+}
+
+
+// Logic to convert CSV to JSON and download
 btn.addEventListener("click", insertCsv)
 
 function insertCsv() {

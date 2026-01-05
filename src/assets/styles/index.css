@@ -1,0 +1,30 @@
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    gap: 3rem;
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+section p a {
+    text-decoration: none;
+    color: var(--text-primary-color);
+    font-size: 1.5rem;
+    transition: color 0.3s ease;
+}
+
+section p a:hover {
+    color: var(--text-secondary-color);
+}

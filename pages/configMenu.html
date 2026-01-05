@@ -4,26 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../src/assets/styles/global.css">
+    <link rel="stylesheet" href="../src/assets/styles/configMenu.css">
     <title>Menu de Configurações</title>
 </head>
 
 <body>
-    <h1>Menu de Configurações</h1>
+    <main>
+        <h1>Menu de Configurações</h1>
 
-    <div>
-        <h2>Adcione aqui a tabela</h2>
+        <section>
+            <h2>Adicione aqui a tabela</h2>
 
-        <label for="file">Escolha o arquivo da tabela.</label>
-        <input type="file" id="inputFile" accept=".csv">
-    </div>
+            <div class="upload-container" id="dropZone">
+                <input type="file" id="inputFile" accept=".csv" hidden>
+                <div class="upload-content">
+                    <span class="icon">📁</span>
+                    <p>Arraste o arquivo aqui ou <strong>clique para buscar</strong></p>
+                    <p id="fileName" class="file-name"></p>
+                </div>
+            </div>
 
-    <div>
-        <button id="btnSend">Enviar arquivo</button>
-    </div>
+            <button id="btnSend">Converter e Baixar</button>
 
-    <div>
-        <span id="output"></span>
-    </div>
+            <span id="output"></span>
+        </section>
+
+        <a href="../index.html">Voltar para o menu</a>
+    </main>
 
     <script src="../src/config/tableConverter.js"></script>
 </body>
