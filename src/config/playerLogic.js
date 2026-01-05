@@ -55,20 +55,41 @@
 
     // funções lógicas
 
-    function randomizeReader() {
-        const playersList = JSON.parse(localStorage.getItem("players"))
-
-        if (!playersList || playersList.length === 0) return
-
+    function randomizeReader(playersList) {
         const chosenIndex = Math.floor(Math.random() * playersList.length)
-
         playersList[chosenIndex].type = "reader"
+        return chosenIndex
+    }
 
-        localStorage.setItem("players", JSON.stringify(playersList))
+    function shuffleOrder(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1))
+                ;[array[i], array[j]] = [array[j], array[i]]
+        }
+
+        const shuffledArray = array
+        const spanOutput = document.getElementById("playerOrder")
+        let names = ''
+
+        for (let i = 0; i < shuffledArray.length; i++) {
+            names += shuffledArray[i].name
+            if (names == "") {
+                alert("coleque nomes")
+                return
+            }
+            if (i < shuffledArray.length - 1) {
+                names += ", "
+            }
+        }
+
+        spanOutput.textContent = names
+
+        return array
     }
 
     function savePlayers() {
         localStorage.removeItem("players")
+        localStorage.removeItem("orderPlayers")
 
         const playersList = gameState.playersData
         playersList.length = 0
@@ -89,8 +110,16 @@
             nameInput.value = ""
             colorInput.value = "#000000"
         }
+
+        gameState.playersOrder = shuffleOrder(playersList)
+        
+        if(playersList[0].type == ""){
+            gameState.actualPlayer = playersList[0]
+        }else{
+            gameState.actualPlayer = playersList[1]
+        }
+
         localStorage.setItem("players", JSON.stringify(playersList))
-        randomizeReader()
-        // location.reload()
+        localStorage.setItem("orderPlayers", JSON.stringify(gameState.playersOrder))
     }
 })();

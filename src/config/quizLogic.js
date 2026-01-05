@@ -9,9 +9,6 @@
 
     function getPlayers() {
         const players = JSON.parse(localStorage.getItem("players"))
-        const answeringPlayer = players[2]
-        const readingPlayer = players[1]
-
         outputPlayerAnswering.textContent = answeringPlayer
         outputPlayerReading.textContent = readingPlayer
     }
