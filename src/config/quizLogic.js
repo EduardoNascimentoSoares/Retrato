@@ -30,6 +30,10 @@
         }
     }
 
+    function getQuestions(){
+        
+    }
+
     function setUi() {
         const data = getPlayers()
         const idxPlayer = data.player

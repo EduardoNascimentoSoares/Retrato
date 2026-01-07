@@ -22,7 +22,7 @@ dropZone.addEventListener('drop', (e) => {
 
     if (e.dataTransfer.files.length) {
         const file = e.dataTransfer.files[0];
-        
+
         const dataTransfer = new DataTransfer();
         dataTransfer.items.add(file);
         input.files = dataTransfer.files;
@@ -94,14 +94,15 @@ function convertInJson(csv) {
 }
 
 function saveNewJson(obj) {
-    table = JSON.stringify(obj)
+    const content =
+        `const questions = ${JSON.stringify(obj, null, 2)};`
 
-    const json = new Blob(
-        [table],
-        { type: "application/js" }
-    );
+    const jsFile = new Blob(
+        [content],
+        { type: "text/javascript" }
+    )
 
-    const url = URL.createObjectURL(json)
+    const url = URL.createObjectURL(jsFile)
     const a = document.createElement("a")
     a.href = url
     a.download = "perguntas.js"

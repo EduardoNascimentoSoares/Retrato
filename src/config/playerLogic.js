@@ -82,6 +82,8 @@
 
     function savePlayers() {
         localStorage.removeItem("orderPlayers")
+        localStorage.removeItem("actualPlayers")
+        localStorage.removeItem("readerPlayers")
 
         const playersList = []
         playersList.length = 0
