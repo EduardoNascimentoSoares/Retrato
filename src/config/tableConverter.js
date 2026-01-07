@@ -94,7 +94,12 @@ function convertInJson(csv) {
 }
 
 function saveNewJson(obj) {
-    const content = `const questions = ${JSON.stringify(obj, null, 2)};`
+    const content =
+        `const jsonData = function (){
+    const questions = ${JSON.stringify(obj, null, 2)
+        };
+    return questions
+    }();`
 
     const jsFile = new Blob(
         [content],

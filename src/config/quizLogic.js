@@ -1,9 +1,11 @@
 ; (function () {
     window.gameState = window.gameState = window.gameState || []
+    window.jsonData = window.jsonData = window.jsonData || []
 
     // CHAMADAS DE FUNÇÃO
 
     window.addEventListener("load", setUi)
+    window.addEventListener("load", getQuestions)
     window.addEventListener("keydown", e => {
         if (e.key === "Enter") {
             checkAnswer()
@@ -31,7 +33,6 @@
     }
 
     function getQuestions() {
-
     }
 
     function setUi() {

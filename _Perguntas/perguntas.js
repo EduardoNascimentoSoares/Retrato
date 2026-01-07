@@ -1,4 +1,5 @@
-const questions = [
+const jsonData = function (){
+    const questions = [
   {
     "Categoria": "Personagem",
     "Resposta": "Harry Potter",
@@ -686,3 +687,5 @@ const questions = [
     "Dica10": "Sou a diretora de operações em Neon Genesis Evangelion."
   }
 ];
+    return questions
+    }();
