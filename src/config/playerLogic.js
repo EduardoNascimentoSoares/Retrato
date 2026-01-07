@@ -62,26 +62,20 @@
     }
 
     function shuffleOrder(array) {
+        array.forEach((player, index) => {
+            if (!player.name || player.name.trim() === "") {
+                player.name = `Jogador ${index + 1}`
+            }
+        })
+
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1))
                 ;[array[i], array[j]] = [array[j], array[i]]
         }
 
-        const shuffledArray = array
         const spanOutput = document.getElementById("playerOrder")
-        let names = ''
 
-        for (let i = 0; i < shuffledArray.length; i++) {
-            if (shuffledArray[i].name == "") {
-                shuffledArray[i].name = `Jogador ${i + 1}`
-                names += `Jogador ${i + 1}`
-            }
-            if (i < shuffledArray.length - 1) {
-                names += ", "
-            }
-        }
-
-        spanOutput.textContent = names
+        spanOutput.textContent = array.map(p => p.name).join(", ")
 
         return array
     }
