@@ -3,14 +3,22 @@
 
     // CHAMADAS DE FUNÇÕES
 
+    if (localStorage.getItem("orderPlayers")) {
+        hideMenu()
+    }
+
+    let numPlayers = document.querySelector('input[name="numPlayers"]:checked').value
     window.addEventListener("load", () => {
-        createPlayersInputs(numPlayers.value)
+        createPlayersInputs(numPlayers)
     })
 
-    const numPlayers = document.getElementById("numPlayers")
-    numPlayers.addEventListener("change", () => {
-        createPlayersInputs(numPlayers.value)
-    })
+    const playerRadios = document.querySelectorAll('input[name="numPlayers"]');
+    playerRadios.forEach(radio => {
+        radio.addEventListener('change', (evento) => {
+            numPlayers = evento.target.value;
+            createPlayersInputs(numPlayers);
+        });
+    });
 
     const btnSave = document.getElementById("btnSavePlayers")
     btnSave.addEventListener("click", savePlayers)
@@ -28,6 +36,7 @@
             const inputColor = document.createElement("input")
             const labelColor = document.createElement("label")
 
+            const div = document.createElement("div")
             const p = document.createElement("p")
 
             p.textContent = `Jogador ${i + 1}`
@@ -45,12 +54,21 @@
             inputColor.type = "color"
             inputColor.id = `playerColor${i}`
 
-            divPlayers.appendChild(p)
-            divPlayers.appendChild(labelName)
-            divPlayers.appendChild(inputName)
-            divPlayers.appendChild(labelColor)
-            divPlayers.appendChild(inputColor)
+            div.appendChild(p)
+            div.appendChild(labelName)
+            div.appendChild(inputName)
+            div.appendChild(labelColor)
+            div.appendChild(inputColor)
+            divPlayers.appendChild(div)
         }
+    }
+
+    function hideMenu() {
+        const playersConfigMenu = document.getElementById("playersConfigMenu")
+        playersConfigMenu.classList.add("hidden")
+
+        const background = document.getElementById("backgound")
+        background.classList.remove("blur")
     }
 
     // FUNÇÕES LÓGICAS
@@ -88,7 +106,7 @@
         const playersList = []
         playersList.length = 0
 
-        for (let i = 0; i < numPlayers.value; i++) {
+        for (let i = 0; i < numPlayers; i++) {
             const nameInput = document.getElementById(`playerName${i}`)
             const colorInput = document.getElementById(`playerColor${i}`)
 
@@ -111,11 +129,11 @@
 
         gameState.readerPlayer = idxReaderPlayer % len
         gameState.actualPlayer = (idxReaderPlayer + 1) % len
-    
+
         localStorage.setItem("orderPlayers", JSON.stringify(gameState.playersOrder))
         localStorage.setItem("actualPlayer", JSON.stringify(gameState.actualPlayer))
         localStorage.setItem("readerPlayer", JSON.stringify(gameState.readerPlayer))
 
-        // Diminuir Pop Up
+        hideMenu()
     }
 })();
