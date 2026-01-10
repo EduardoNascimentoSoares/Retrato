@@ -1,13 +1,15 @@
 const tileCoordinates = [{ "top": "88.99", "left": "10.05" }, { "top": "90.57", "left": "22.35" }, { "top": "90.28", "left": "28.85" }, { "top": "91.14", "left": "34.65" }, { "top": "90.71", "left": "41.35" }, { "top": "90.42", "left": "47.45" }, { "top": "90.57", "left": "54.05" }, { "top": "90.86", "left": "60.85" }, { "top": "90.71", "left": "66.85" }, { "top": "90.57", "left": "73.25" }, { "top": "90.86", "left": "79.85" }, { "top": "91.00", "left": "85.95" }, { "top": "91.00", "left": "92.85" }, { "top": "81.94", "left": "93.85" }, { "top": "73.03", "left": "92.85" }, { "top": "73.46", "left": "86.35" }, { "top": "73.75", "left": "80.05" }, { "top": "74.18", "left": "74.65" }, { "top": "73.46", "left": "67.85" }, { "top": "63.11", "left": "67.75" }, { "top": "49.02", "left": "68.05" }, { "top": "43.70", "left": "61.25" }, { "top": "44.42", "left": "55.25" }, { "top": "54.48", "left": "54.85" }, { "top": "63.54", "left": "55.05" }, { "top": "73.46", "left": "54.85" }, { "top": "73.60", "left": "46.95" }, { "top": "73.17", "left": "40.75" }, { "top": "73.32", "left": "34.85" }, { "top": "73.60", "left": "28.15" }, { "top": "73.75", "left": "22.65" }, { "top": "73.03", "left": "16.05" }, { "top": "62.97", "left": "15.95" }, { "top": "54.92", "left": "15.75" }, { "top": "45.72", "left": "15.65" }, { "top": "36.66", "left": "15.65" }, { "top": "26.74", "left": "15.95" }, { "top": "26.74", "left": "22.35" }, { "top": "27.60", "left": "28.85" }, { "top": "36.37", "left": "28.45" }, { "top": "51.47", "left": "28.55" }, { "top": "56.78", "left": "35.65" }, { "top": "56.07", "left": "43.15" }, { "top": "45.57", "left": "42.15" }, { "top": "36.23", "left": "42.65" }, { "top": "26.31", "left": "42.75" }, { "top": "27.03", "left": "50.45" }, { "top": "26.31", "left": "57.45" }, { "top": "26.45", "left": "64.85" }, { "top": "26.31", "left": "72.15" }, { "top": "27.31", "left": "78.35" }, { "top": "34.50", "left": "78.35" }, { "top": "42.98", "left": "78.65" }, { "top": "44.71", "left": "86.45" }, { "top": "44.28", "left": "93.25" }, { "top": "35.36", "left": "93.85" }, { "top": "25.73", "left": "94.05" }, { "top": "17.68", "left": "93.85" }, { "top": "9.34", "left": "93.85" }, { "top": "9.20", "left": "87.35" }, { "top": "8.19", "left": "77.85" }, { "top": "8.77", "left": "68.35" }, { "top": "8.63", "left": "61.05" }, { "top": "8.34", "left": "55.25" }, { "top": "8.48", "left": "48.35" }, { "top": "8.63", "left": "41.95" }, { "top": "9.06", "left": "34.85" }, { "top": "8.19", "left": "28.75" }, { "top": "8.63", "left": "22.45" }, { "top": "10.93", "left": "10.25" }]
 
-const idxPlayer = parseInt(localStorage.getItem("actualPlayer"))
-const idxReader = parseInt(localStorage.getItem("readerPlayer"))
-
-let players = JSON.parse(localStorage.getItem("orderPlayers")) || []
-
 const boardContainer = document.getElementById('board-container');
 
+function getPlayersFromStorage() {
+    const players = JSON.parse(localStorage.getItem("orderPlayers")) || []
+    return players;
+}
+
 function createPawns() {
+    const players = getPlayersFromStorage();
+
     players.forEach(player => {
         const pawn = document.createElement('div');
         pawn.id = `pawn-${player.id}`;
@@ -35,6 +37,7 @@ function calculateOffset(index, totalOnTile) {
 }
 
 function updateVisualPositions() {
+    const players = getPlayersFromStorage();
     for (let i = 0; i < tileCoordinates.length; i++) {
 
         const occupants = players.filter(p => p.currentTile === i);
@@ -57,6 +60,7 @@ function updateVisualPositions() {
 }
 
 function movePlayer(playerId, steps) {
+    const players = getPlayersFromStorage();
     const player = players.find(p => p.id === playerId);
     if (player) {
         player.currentTile += steps;
@@ -76,14 +80,6 @@ function movePlayer(playerId, steps) {
 }
 
 createPawns();
-
-// chama um erro no ínico da chamada por não encontrar um currentTile
-// arruma quando vira popUp
-const playerTile = parseInt(players[idxPlayer].currentTile)
-const readerTile = parseInt(players[idxReader].currentTile)
-
-movePlayer(idxPlayer, playerTile);
-movePlayer(idxReader, readerTile);
 
 // CODIGO QUE CRIA AS COORDENADAS CLICANDO NO TABULEIRO
 /*

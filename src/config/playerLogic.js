@@ -117,6 +117,6 @@
         localStorage.setItem("readerPlayer", JSON.stringify(gameState.readerPlayer))
 
         togglePopUp("playersConfigMenu")
-
+        createPawns()
     }
 })();
