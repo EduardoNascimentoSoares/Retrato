@@ -4,7 +4,7 @@
     // CHAMADAS DE FUNÇÕES
 
     if (localStorage.getItem("orderPlayers")) {
-        hideMenu()
+        togglePopUp("playersConfigMenu")
     }
 
     let numPlayers = document.querySelector('input[name="numPlayers"]:checked').value
@@ -63,14 +63,6 @@
         }
     }
 
-    function hideMenu() {
-        const playersConfigMenu = document.getElementById("playersConfigMenu")
-        playersConfigMenu.classList.add("hidden")
-
-        const background = document.getElementById("backgound")
-        background.classList.remove("blur")
-    }
-
     // FUNÇÕES LÓGICAS
 
     function shufflePlayersOrder(array) {
@@ -124,6 +116,7 @@
         localStorage.setItem("actualPlayer", JSON.stringify(gameState.actualPlayer))
         localStorage.setItem("readerPlayer", JSON.stringify(gameState.readerPlayer))
 
-        hideMenu()
+        togglePopUp("playersConfigMenu")
+        createPawns()
     }
 })();

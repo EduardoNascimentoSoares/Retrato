@@ -4,13 +4,20 @@
 
     // CHAMADAS DE FUNÇÃO
 
-    window.addEventListener("load", setUi)
+    const btnShowQuiz = document.getElementById("btnShowQuiz")
+    btnShowQuiz.addEventListener("click", setUi)
+
+    const btnHideQuiz = document.getElementById("btnHideQuiz")
+    btnHideQuiz.addEventListener("click", () => {
+        togglePopUp("quizPopUp")
+    })
 
     window.addEventListener("keydown", e => {
         if (e.key === "Enter") {
             checkAnswer()
         }
     })
+
     const btn = document.getElementById("btnResp")
     btn.addEventListener("click", checkAnswer)
 
@@ -107,6 +114,8 @@
 
         // Adcionando as dicas
         addTips()
+
+        togglePopUp("quizPopUp")
     }
 
     function addTips() {
@@ -193,31 +202,39 @@
         let idxPlayer = playersData.player
         let idxReader = playersData.reader
 
-        order[idxReader].currentTile += (10 - playersData.points)
-        order[idxPlayer].currentTile += playersData.points
+        const playerPoints = (10 - playersData.points)
+        const readerPoints = playersData.points
 
+        order[idxReader].currentTile += playerPoints
+        order[idxPlayer].currentTile += readerPoints
+
+        togglePopUp("quizPopUp")
+        movePlayer(idxPlayer, playerPoints);
+        movePlayer(idxReader, readerPoints);
+
+        // Calculando o próximo jogador e leitor
         idxReader++
-
         if (idxReader >= order.length) {
             idxReader = 0
         }
 
         idxPlayer++
-
         if (idxPlayer >= order.length) {
             idxPlayer = 0
         }
 
         const questionsOrder = questionsData.slice(1)
-        gameState.points = 10
-
+        
+        // Salvar novos valores no localStorage
         localStorage.setItem("actualPlayer", idxPlayer)
         localStorage.setItem("readerPlayer", idxReader)
         localStorage.setItem("questionsOrder", JSON.stringify(questionsOrder))
-        localStorage.setItem("points", gameState.points)
         localStorage.setItem("orderPlayers", JSON.stringify(order))
+        
+        // Resetar as dicas reveladas e os pontos
         localStorage.removeItem("revealedTips")
 
-        location.href = "../pages/board.html"
+        gameState.points = 10
+        localStorage.setItem("points", gameState.points)
     }
 })();

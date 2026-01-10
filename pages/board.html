@@ -6,25 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../src/assets/styles/global.css">
     <link rel="stylesheet" href="../src/assets/styles/board.css">
-    <link rel="stylesheet" href="../src/assets/styles/palyersMenus.css">
+    <link rel="stylesheet" href="../src/assets/styles/playersPopUp.css">
+    <link rel="stylesheet" href="../src/assets/styles/quizStyle.css">
     <title>Tabuleiro</title>
 </head>
 
 <body>
     <!-- Tudo que fica no fundo -->
     <main id="backgound" class="blur">
+
+        <!-- fazer a logica pra sempre mostrar na tela a ordem dos players, quem tá jogando agr, quem vai ler e etc... -->
+        <p>A ordem dos players será <span id="playerOrder"></span></p>
+
         <div id="board-container">
             <img src="../src/assets/image/board.png" alt="" id="board-image">
         </div>
 
-        <!-- fazer a logica pra sempre mostrar na tela a ordem dos players, quem tá jogando agr, quem vai ler e etc... -->
-        <p>A ordem dos players será <span id="playerOrder"></span></p> 
-        
-        <a href="quiz.html">Começar o Jogo</a>
+        <!-- <a href="quiz.html">Começar o Jogo</a> -->
+         <button id="btnShowQuiz">Ir para a pergunta</button>
     </main>
 
     <!-- Menu de Configuração dos Players que some depois que o jogo começa -->
-    <div id="playersConfigMenu" class="playersConfigMenu">
+    <section id="playersConfigMenu" class="playersConfigMenu">
         <h2>Menu de Configuração dos Players</h2>
 
         <p>Escolha quantos jogadores participarão:</p>
@@ -59,7 +62,46 @@
         </div>
 
         <button id="btnSavePlayers">Salvar jogadores</button>
-    </div>
+    </section>
+
+    <!-- Pop-up da pergunta -->
+    <section id="quizPopUp" class="quizPopUp hidden">
+        <h3>The Big Quiz</h3>
+
+        <div>
+            <p>Categoria: <span id="category"></span></p>
+            <p id="response" class="oculto"></p>
+        </div>
+
+        <div>
+            <p>points: <span id="points"></span>.</p>
+            <p>Jogador respondendo: <span id="answering"></span>.</p>
+            <p>Jogador lendo: <span id="reading"></span>.</p>
+        </div>
+
+        <div>
+            <label for="chute">Tente a resposta</label>
+            <input id="chute" type="text">
+            <button id="btnResp">Enviar</button>
+        </div>
+
+        <div id="dicas">
+            <ol>
+                <li><span id="dica1" class="oculto"></span></li>
+                <li><span id="dica2" class="oculto"></span></li>
+                <li><span id="dica3" class="oculto"></span></li>
+                <li><span id="dica4" class="oculto"></span></li>
+                <li><span id="dica5" class="oculto"></span></li>
+                <li><span id="dica6" class="oculto"></span></li>
+                <li><span id="dica7" class="oculto"></span></li>
+                <li><span id="dica8" class="oculto"></span></li>
+                <li><span id="dica9" class="oculto"></span></li>
+                <li><span id="dica10" class="oculto"></span></li>
+            </ol>
+        </div>
+
+        <button id="btnHideQuiz">Recolher pop-up</button>
+    </section>
 
     <button id="btnToggleDebug" class="debug-btn">🐛</button>
 
@@ -82,9 +124,13 @@
 
 </body>
 
+<script src="../src/config/ui.js"></script>
 <script src="../src/config/boardConfig.js"></script>
 <script src="../src/config/debugPainel.js"></script>
 <script src="../src/config/gameState.js"></script>
 <script src="../src/config/playerLogic.js"></script>
+
+<script type="module" src="../_Perguntas/perguntas.js"></script>
+<script type="module" src="../src/config/quizLogic.js"></script>
 
 </html>

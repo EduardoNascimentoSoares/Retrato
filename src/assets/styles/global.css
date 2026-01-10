@@ -10,3 +10,13 @@
     box-sizing: border-box;
     font-family: var(--font-family);
 }
+
+.hidden {
+    display: none !important;
+}
+
+.blur {
+    filter: blur(5px);
+    pointer-events: none;
+    /* Desativa interações com o conteúdo borrado */
+}
