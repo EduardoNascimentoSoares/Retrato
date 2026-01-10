@@ -4,42 +4,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../src/assets/styles/global.css">
     <link rel="stylesheet" href="../src/assets/styles/board.css">
     <link rel="stylesheet" href="../src/assets/styles/palyersMenus.css">
     <title>Tabuleiro</title>
 </head>
 
 <body>
-    <div id="board-container">
-        <img src="../src/assets/image/board.png" alt="" id="board-image">
-    </div>
+    <!-- Tudo que fica no fundo -->
+    <main id="backgound" class="blur">
+        <div id="board-container">
+            <img src="../src/assets/image/board.png" alt="" id="board-image">
+        </div>
 
-    <div id="playersConfigMenu">
-        <h3>Menu de Confuguração dos Players</h3>
+        <!-- fazer a logica pra sempre mostrar na tela a ordem dos players, quem tá jogando agr, quem vai ler e etc... -->
+        <p>A ordem dos players será <span id="playerOrder"></span></p> 
+        
+        <a href="quiz.html">Começar o Jogo</a>
+    </main>
 
-        <p>A ordem dos players será <span id="playerOrder">.</span></p>
-        <label for="numPlayers">Ecolha quantos jogadores pariciparão:</label>
-        <input id="numPlayers" type="number"  min="2" max="8" value="2">
+    <!-- Menu de Configuração dos Players que some depois que o jogo começa -->
+    <div id="playersConfigMenu" class="playersConfigMenu">
+        <h2>Menu de Configuração dos Players</h2>
 
-        <div id="playersInput"></div>
+        <p>Escolha quantos jogadores participarão:</p>
+
+        <div class="radio-group">
+            <input type="radio" name="numPlayers" id="p2" value="2" checked>
+            <label for="p2">2</label>
+
+            <input type="radio" name="numPlayers" id="p3" value="3">
+            <label for="p3">3</label>
+
+            <input type="radio" name="numPlayers" id="p4" value="4">
+            <label for="p4">4</label>
+
+            <input type="radio" name="numPlayers" id="p5" value="5">
+            <label for="p5">5</label>
+
+            <input type="radio" name="numPlayers" id="p6" value="6">
+            <label for="p6">6</label>
+
+            <input type="radio" name="numPlayers" id="p7" value="7">
+            <label for="p7">7</label>
+
+            <input type="radio" name="numPlayers" id="p8" value="8">
+            <label for="p8">8</label>
+        </div>
+
+        <p>Escolha as configurações dos jogadores</p>
+
+        <div id="playersInput">
+            <!-- Inputs dos players serão gerados aqui -->
+        </div>
 
         <button id="btnSavePlayers">Salvar jogadores</button>
-        <br>
-        <a href="quiz.html">Começar o Jogo</a>
     </div>
 
+    <button id="btnToggleDebug" class="debug-btn">🐛</button>
 
-    <button id="btn-toggle-debug" class="debug-btn">🐛</button>
-
-    <div id="painel-debug" class="painel-debug hidden">
+    <div id="painelDebug" class="painel-debug hidden">
         <h3>Painel de Controle</h3>
 
         <div class="debug-section">
             <label>Jogador (ID):</label>
-            <input type="number" id="debug-player-id" min="0" max="4" value="0">
+            <input type="number" id="debugPlayerId" min="0" max="4" value="0">
 
             <label>Passos:</label>
-            <input type="number" id="debug-steps" value="1">
+            <input type="number" id="debugSteps" value="1">
 
             <div class="debug-actions">
                 <button onclick="debugMover(1)">Avançar</button>
@@ -54,4 +86,5 @@
 <script src="../src/config/debugPainel.js"></script>
 <script src="../src/config/gameState.js"></script>
 <script src="../src/config/playerLogic.js"></script>
+
 </html>
