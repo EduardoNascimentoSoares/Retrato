@@ -18,18 +18,24 @@
 
     const outputPlayerAnswering = document.getElementById("answering")
     const outputPlayerReading = document.getElementById("reading")
-    const outputCategory = document.getElementById("categoria")
-    const outputResponse = document.getElementById("resposta")
+    const outputCategory = document.getElementById("category")
+    const outputResponse = document.getElementById("response")
+    const outputPoints = document.getElementById("points")
 
 
     function getPlayers() {
         const players = JSON.parse(localStorage.getItem("orderPlayers"))
         const actualPlayer = JSON.parse(localStorage.getItem("actualPlayer"))
         const readerPlayer = JSON.parse(localStorage.getItem("readerPlayer"))
+        const getPoints = JSON.parse(localStorage.getItem("points"))
+        if (!getPoints) {
+            localStorage.setItem("points", JSON.stringify(gameState.points))
+        }
 
         return {
             order: players,
             player: actualPlayer,
+            points: getPoints,
             reader: readerPlayer
         }
     }
@@ -87,9 +93,11 @@
         // Adcionando o Player
         const idxPlayer = playerData.player
         const idxReader = playerData.reader
+        const points = playerData.points
 
         outputPlayerAnswering.textContent = playerData.order[idxPlayer].name
         outputPlayerReading.textContent = playerData.order[idxReader].name
+        outputPoints.textContent = points
         outputCategory.textContent = question.Categoria
         outputResponse.textContent = question.Resposta
 
@@ -120,6 +128,7 @@
                 hint.classList.remove("oculto")
                 gameState.revealedTips.push(tipOrder[i])
                 localStorage.setItem("revealedTips", JSON.stringify(gameState.revealedTips))
+                verifyPoints()
             }, { once: true })
         }
     }
@@ -130,8 +139,9 @@
         const answer = document.getElementById("chute")
         const answerValue = answer.value.trim().toLowerCase()
         const question = getQuestions().question
+        const resp = question.Resposta.trim().toLowerCase()
 
-        if (answerValue === question.Resposta.trim().toLowerCase()) {
+        if (answerValue === resp) {
             alert("Acertou!")
             endRound()
             return
@@ -161,6 +171,20 @@
         answer.value = ""
     }
 
+    function verifyPoints() {
+        let points = JSON.parse(localStorage.getItem("points"))
+        // Este caso não deve existir
+        // Olhar como o jogo é jogado nesta questão
+        if (points > 1) {
+            points--
+            outputPoints.textContent = points
+            localStorage.setItem("points", JSON.stringify(points))
+        } else {
+            alert(`O jogador andará ${1} e a pessoa que esta lendo andará ${10}`)
+            endRound()
+        }
+    }
+
     function endRound() {
         const playersData = getPlayers()
         const questionsData = getQuestions().questionOrder
@@ -182,10 +206,22 @@
         }
 
         const questionsOrder = questionsData.slice(1)
+        gameState.points = 10
+
+        let playerTile = localStorage.getItem("movementPlayer")
+        playerTile = playersData.points
+        
+        let readerTile = localStorage.getItem("movementReader")
+        readerTile = (10 - playersData.points)
 
         localStorage.setItem("readerPlayer", idxReader)
-        localStorage.setItem("readerPlayer", idxReader)
+        localStorage.setItem("actualPlayer", idxPlayer)
         localStorage.setItem("questionsOrder", JSON.stringify(questionsOrder))
+        localStorage.setItem("points", gameState.points)
+        localStorage.setItem("movementPlayer", playerTile)
+        localStorage.setItem("movementReader", readerTile)
         localStorage.removeItem("revealedTips")
+
+        location.href = "../pages/board.html"
     }
 })();
