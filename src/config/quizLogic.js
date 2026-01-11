@@ -114,14 +114,13 @@
 
         // Adcionando as dicas
         addTips()
-
         togglePopUp("quizPopUp")
     }
 
+    const revealedTips = JSON.parse(localStorage.getItem("revealedTips")) || []
     function addTips() {
         const question = getQuestions().question
         const tipOrder = shuffleTipsOrder()
-        const revealedTips = JSON.parse(localStorage.getItem("revealedTips")) || []
 
         for (let i = 0; i < 10; i++) {
             const hint = document.getElementById(`dica${i + 1}`)
@@ -182,16 +181,14 @@
 
     function verifyPoints() {
         let points = JSON.parse(localStorage.getItem("points"))
-        // Este caso não deve existir
-        // Olhar como o jogo é jogado nesta questão
+
         if (points > 1) {
             points--
             outputPoints.textContent = points
             localStorage.setItem("points", JSON.stringify(points))
-        } else {
-            alert(`O jogador andará ${1} e a pessoa que esta lendo andará ${10}`)
-            endRound()
+            return
         }
+        endRound()
     }
 
     function endRound() {
@@ -224,13 +221,13 @@
         }
 
         const questionsOrder = questionsData.slice(1)
-        
+
         // Salvar novos valores no localStorage
         localStorage.setItem("actualPlayer", idxPlayer)
         localStorage.setItem("readerPlayer", idxReader)
         localStorage.setItem("questionsOrder", JSON.stringify(questionsOrder))
         localStorage.setItem("orderPlayers", JSON.stringify(order))
-        
+
         // Resetar as dicas reveladas e os pontos
         localStorage.removeItem("revealedTips")
 
