@@ -182,13 +182,23 @@
     function verifyPoints() {
         let points = JSON.parse(localStorage.getItem("points"))
 
-        if (points > 1) {
-            points--
-            outputPoints.textContent = points
-            localStorage.setItem("points", JSON.stringify(points))
-            return
+        points--
+        outputPoints.textContent = points
+        localStorage.setItem("points", JSON.stringify(points))
+
+        if (points === 0) {
+            const tips = document.querySelectorAll('[id^="dica"]')
+            const hiddenTip = [...tips].find(tip =>
+                tip.classList.contains("oculto")
+            )
+
+            if (hiddenTip) {
+                hiddenTip.classList.remove("oculto")
+                //TODO: colocar pop up de mensagem aqui
+                return
+            }
+            endRound()
         }
-        endRound()
     }
 
     function endRound() {
