@@ -114,6 +114,7 @@
 
         // Adcionando as dicas
         addTips()
+        addTraps()
         togglePopUp("quizPopUp")
     }
 
@@ -139,6 +140,50 @@
                 verifyPoints()
             }, { once: true })
         }
+    }
+
+    function addTraps() {
+        let traps = JSON.parse(localStorage.getItem("traps"))
+
+        if (!traps) {
+            let totalTips = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+            totalTips.sort(() => Math.random() - 0.5)
+
+            const trapsIdx = totalTips.slice(0, 3)
+
+            traps = trapsIdx.map(idx => ({
+                index: idx,
+                type: Math.floor(Math.random() * 3) + 1
+            }))
+
+            gameState.traps = traps
+
+            // fazer o traps funcionar como o gameState, adcionar indice e tipo dentro dele
+
+            localStorage.setItem("traps", JSON.stringify(gameState.traps))
+            traps = JSON.parse(localStorage.getItem("traps"))
+        }
+
+
+        const hints = document.querySelectorAll('[id^="dica"]')
+
+        // Substituir este for por um forEach após mudar o traps
+        traps.forEach(trap => {
+            const hint = hints[trap.index]
+            if (!hint) return
+
+            switch (trap.type) {
+                case 1:
+                    hint.textContent = "a1"
+                    break
+                case 2:
+                    hint.textContent = "a2"
+                    break
+                case 3:
+                    hint.textContent = "a3"
+                    break
+            }
+        })
     }
 
     // FUNÇÕES LÓGICAS

@@ -7,7 +7,8 @@ const gameFunctions = function () {
 
         questionsOrder: [],
         tipsOrder: [],
-        revealedTips: []
+        revealedTips: [],
+        traps: []
     }
 
     return gameState
