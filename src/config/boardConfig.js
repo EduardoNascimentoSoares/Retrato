@@ -19,7 +19,7 @@ function createPawns() {
         boardContainer.appendChild(pawn);
     });
 
-    updateVisualPositions();
+    updateVisualPositions(players);
 }
 
 function calculateOffset(index, totalOnTile) {
@@ -36,8 +36,7 @@ function calculateOffset(index, totalOnTile) {
     };
 }
 
-function updateVisualPositions() {
-    const players = getPlayersFromStorage();
+function updateVisualPositions(players) {
     for (let i = 0; i < tileCoordinates.length; i++) {
 
         const occupants = players.filter(p => p.currentTile === i);
@@ -59,24 +58,22 @@ function updateVisualPositions() {
     }
 }
 
-function movePlayer(playerId, steps) {
+function movePlayer(idxPlayer, steps) {
     const players = getPlayersFromStorage();
-    const player = players.find(p => p.id === playerId);
-    if (player) {
-        player.currentTile += steps;
 
-        if (player.currentTile >= tileCoordinates.length - 1) {
-            player.currentTile = tileCoordinates.length - 1;
+    players[idxPlayer].currentTile += steps;
 
-            //TODO: chamar a funçao de final de jogo
-        }
+    if (players[idxPlayer].currentTile >= tileCoordinates.length - 1) {
+        players[idxPlayer].currentTile = tileCoordinates.length - 1;
 
-        if (player.currentTile < 0) {
-            player.currentTile = 0;
-        }
-
-        updateVisualPositions();
+        //TODO: chamar a funçao de final de jogo
     }
+
+    if (players[idxPlayer].currentTile < 0) {
+        players[idxPlayer].currentTile = 0;
+    }
+
+    updateVisualPositions(players);
 }
 
 createPawns();
