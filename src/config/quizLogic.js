@@ -278,8 +278,10 @@
         order[idxPlayer].currentTile += readerPoints
 
         togglePopUp("quizPopUp")
-        movePlayer(idxPlayer, playerPoints);
-        movePlayer(idxReader, readerPoints);
+        movePlayer(idxPlayer, playerPoints, order);
+        movePlayer(idxReader, readerPoints, order);
+
+        // movePlayersOnBoard(idxReader, idxPlayer, readerPoints, playerPoints);
 
         // Calculando o próximo jogador e leitor
         idxReader++

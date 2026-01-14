@@ -36,11 +36,10 @@ function calculateOffset(index, totalOnTile) {
     };
 }
 
-function updateVisualPositions(players) {
+function updateVisualPositions(order) {
     for (let i = 0; i < tileCoordinates.length; i++) {
 
-        const occupants = players.filter(p => p.currentTile === i);
-
+        const occupants = order.filter(p => p.currentTile === i);
         if (occupants.length > 0) {
             const center = tileCoordinates[i]; // {top: '...', left: '...'}
 
@@ -58,7 +57,7 @@ function updateVisualPositions(players) {
     }
 }
 
-function movePlayer(idxPlayer, steps) {
+function movePlayer(idxPlayer, steps, finalOrder) {
     const players = getPlayersFromStorage();
 
     players[idxPlayer].currentTile += steps;
@@ -73,7 +72,7 @@ function movePlayer(idxPlayer, steps) {
         players[idxPlayer].currentTile = 0;
     }
 
-    updateVisualPositions(players);
+    updateVisualPositions(finalOrder);
 }
 
 createPawns();
