@@ -119,7 +119,6 @@
     }
 
     function addTips() {
-        // Pega as dicas reveladas do storage atualizado
         const revealedTips = JSON.parse(localStorage.getItem("revealedTips")) || []
         gameState.revealedTips = [...revealedTips]
 
@@ -129,14 +128,12 @@
         for (let i = 0; i < 10; i++) {
             let hint = document.getElementById(`dica${i + 1}`)
 
-            // Clona o elemento para remover event listeners antigos da rodada anterior
             const newHint = hint.cloneNode(true)
             hint.parentNode.replaceChild(newHint, hint)
             hint = newHint
 
             hint.textContent = question[`Dica${tipOrder[i]}`]
             
-            // Garante que a dica comece oculta
             hint.classList.add("oculto")
 
             if (revealedTips.includes(tipOrder[i])) {
@@ -162,42 +159,52 @@
 
             const trapsIdx = totalTips.slice(0, 3)
 
-            traps = trapsIdx.map(idx => ({
-                index: idx,
+            traps = trapsIdx.map(index => ({
+                idx: index,
                 type: Math.floor(Math.random() * 3) + 1
             }))
 
             gameState.traps = traps
 
-            // fazer o traps funcionar como o gameState, adcionar indice e tipo dentro dele
-
             localStorage.setItem("traps", JSON.stringify(gameState.traps))
             traps = JSON.parse(localStorage.getItem("traps"))
         }
 
-
         const hints = document.querySelectorAll('[id^="dica"]')
 
-        // Substituir este for por um forEach após mudar o traps
         traps.forEach(trap => {
-            const hint = hints[trap.index]
+            const hint = hints[trap.idx]
             if (!hint) return
 
             switch (trap.type) {
                 case 1:
                     hint.textContent = "a1"
+                    trapType(1)
                     break
                 case 2:
                     hint.textContent = "a2"
+                    trapType(2)
                     break
                 case 3:
                     hint.textContent = "a3"
+                    trapType(3)
                     break
             }
         })
     }
 
     // FUNÇÕES LÓGICAS
+
+    function trapType(type) {
+        switch (type) {
+            case 1:
+                break
+            case 2:
+                break
+            case 3:
+                break
+        }
+    }
 
     function checkAnswer() {
         const answer = document.getElementById("chute")
@@ -250,7 +257,6 @@
 
             if (hiddenTip) {
                 hiddenTip.classList.remove("oculto")
-                //TODO: colocar pop up de mensagem aqui
                 return
             }
             endRound()
@@ -295,6 +301,8 @@
         localStorage.setItem("readerPlayer", idxReader)
         localStorage.setItem("questionsOrder", JSON.stringify(questionsOrder))
         localStorage.setItem("orderPlayers", JSON.stringify(order))
+
+        // TODO: Lembrar de apagar as armadilhas
 
         // Resetar as dicas reveladas e os pontos
         localStorage.removeItem("revealedTips")
