@@ -118,18 +118,29 @@
         togglePopUp("quizPopUp")
     }
 
-    const revealedTips = JSON.parse(localStorage.getItem("revealedTips")) || []
     function addTips() {
+        // Pega as dicas reveladas do storage atualizado
+        const revealedTips = JSON.parse(localStorage.getItem("revealedTips")) || []
+        gameState.revealedTips = [...revealedTips]
+
         const question = getQuestions().question
         const tipOrder = shuffleTipsOrder()
 
         for (let i = 0; i < 10; i++) {
-            const hint = document.getElementById(`dica${i + 1}`)
+            let hint = document.getElementById(`dica${i + 1}`)
+
+            // Clona o elemento para remover event listeners antigos da rodada anterior
+            const newHint = hint.cloneNode(true)
+            hint.parentNode.replaceChild(newHint, hint)
+            hint = newHint
+
             hint.textContent = question[`Dica${tipOrder[i]}`]
+            
+            // Garante que a dica comece oculta
+            hint.classList.add("oculto")
 
             if (revealedTips.includes(tipOrder[i])) {
                 hint.classList.remove("oculto")
-                gameState.revealedTips.push(tipOrder[i])
                 continue
             }
 
