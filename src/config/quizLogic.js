@@ -112,7 +112,8 @@
             outputResponse.classList.remove("oculto")
         })
 
-        // Adcionando as dicas
+        // Adcionando as dicas e Armadilhas
+        verifyTraps()
         addTips()
         addTraps()
         togglePopUp("quizPopUp")
@@ -133,7 +134,7 @@
             hint = newHint
 
             hint.textContent = question[`Dica${tipOrder[i]}`]
-            
+
             hint.classList.add("oculto")
 
             if (revealedTips.includes(tipOrder[i])) {
@@ -152,17 +153,37 @@
 
     function addTraps() {
         let traps = JSON.parse(localStorage.getItem("traps"))
+        const tipsOrder = JSON.parse(localStorage.getItem("tipsOrder"))
 
         if (!traps) {
-            let totalTips = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-            totalTips.sort(() => Math.random() - 0.5)
+            let totalTips = tipsOrder
 
             const trapsIdx = totalTips.slice(0, 3)
 
-            traps = trapsIdx.map(index => ({
-                idx: index,
-                type: Math.floor(Math.random() * 3) + 1
-            }))
+            traps = trapsIdx.map(index => {
+                // const type = Math.floor(Math.random() * 3) + 1
+                const type = 3
+
+                const trap = {
+                    idx: index,
+                    type: type
+                }
+
+                if (type === 2) {
+                    trap.movType = Math.floor(Math.random() * 2)
+                    trap.quantMov = Math.floor(Math.random() * 10) + 1
+                }
+
+                if (type === 3) {
+                    // trap.movType = Math.floor(Math.random() * 2)
+                    trap.movType = 0
+                    // trap.quantMov = Math.floor(Math.random() * 10) + 1
+                    trap.quantMov = 10
+                    trap.isActived = 0
+                }
+
+                return trap
+            })
 
             gameState.traps = traps
 
@@ -176,34 +197,170 @@
             const hint = hints[trap.idx]
             if (!hint) return
 
+            const revealedTips = JSON.parse(localStorage.getItem("revealedTips")) || []
+
             switch (trap.type) {
                 case 1:
-                    hint.textContent = "a1"
-                    trapType(1)
+                    hint.textContent = "Perdeu a Vez!"
                     break
                 case 2:
-                    hint.textContent = "a2"
-                    trapType(2)
+                    if (trap.movType == 0) {
+                        hint.textContent = `Volte ${trap.quantMov} casas`
+                    } else {
+                        hint.textContent = `Avance ${trap.quantMov} casas`
+                    }
                     break
                 case 3:
-                    hint.textContent = "a3"
-                    trapType(3)
+                    if (trap.movType == 0) {
+                        hint.textContent = `Escolha alguém para voltar ${trap.quantMov} casas`
+                    } else {
+                        hint.textContent = `Escolha alguém para avançar ${trap.quantMov} casas`
+                    }
                     break
+            }
+
+            if (!revealedTips.includes(trap.idx)) {
+                hint.addEventListener("click", () => {
+                    executeTrap(trap.type, trap.movType, trap.quantMov)
+                }, { once: true })
             }
         })
     }
 
     // FUNÇÕES LÓGICAS
 
-    function trapType(type) {
+    function executeTrap(type, movType = 0, quantMov = 10) {
+        let order = getPlayers().order
+        let idxPlayer = getPlayers().player
+        let idxReader = getPlayers().reader
+        const traps = JSON.parse(localStorage.getItem("traps"))
+
         switch (type) {
             case 1:
+                // Perdeu a vez
+
+                idxPlayer++
+
+                if (idxPlayer >= order.length) {
+                    idxPlayer = 0
+                }
+
+                if (idxPlayer == idxReader) {
+                    idxPlayer++
+
+                    if (idxPlayer >= order.length) {
+                        idxPlayer = 0
+                    }
+                }
+
+                gameState.actualPlayer = idxPlayer
+                localStorage.setItem("actualPlayer", JSON.stringify(gameState.actualPlayer))
+
+                alert("perdeu a vez")
                 break
             case 2:
+                // Volte ou avance x quantidades de casas
+
+                if (movType == 0) {
+                    order[idxPlayer].currentTile < quantMov ? quantMov = 0 : quantMov
+                    order[idxPlayer].currentTile -= quantMov
+
+                    movePlayer(idxPlayer, quantMov, order)
+                    localStorage.setItem("orderPlayers", JSON.stringify(order))
+                } else {
+                    order[idxPlayer].currentTile += quantMov
+
+                    movePlayer(idxPlayer, quantMov, order)
+                    localStorage.setItem("orderPlayers", JSON.stringify(order))
+                }
                 break
+
             case 3:
+                // Escolha alguém para avançar ou voltar x quantidade de casas
+
+                // TODO: o codigo abre uma vez o pop up da armadilha e dps nunca mais fecha (criar um "isExecuted no traps")
+                // TODO: o player escolhido n anda
+
+                const divTrap = document.getElementById("trapRadio")
+                const secTrap = document.getElementById("trapPopUp")
+
+                const title = document.createElement("h3")
+                if (movType == 0) {
+                    title.textContent = `Escolha um jogador para voltar ${quantMov} casas.`
+                } else {
+                    title.textContent = `Escolha um jogador para avançar ${quantMov} casas.`
+                }
+
+                secTrap.appendChild(title)
+
+                for (let i = 0; i < order.length; i++) {
+                    if (idxPlayer != i) {
+                        const namePlayers = order[i].name
+                        const nameInput = document.createElement("input")
+                        nameInput.type = "radio"
+                        nameInput.name = "namePlayers"
+                        nameInput.id = `np${i + 2}`
+                        nameInput.value = i + 2
+
+                        const nameLabel = document.createElement("label")
+                        nameLabel.htmlFor = `np${i + 2}`
+                        nameLabel.id = `namePlayer${i + 2}`
+                        nameLabel.textContent = namePlayers
+
+                        divTrap.appendChild(nameInput)
+                        divTrap.appendChild(nameLabel)
+                    }
+                }
+
+                const choiceButton = document.getElementById("btnTrap")
+
+                const trapPopUp = document.getElementById("trapPopUp")
+                trapPopUp.classList.remove("hidden")
+
+                choiceButton.addEventListener("click", () => {
+                    const chosedPlayerInput = document.querySelector('input[name="namePlayers"]:checked')
+
+                    if (!chosedPlayerInput) {
+                        alert("Selecione um jogador primeiro")
+                        return
+                    }
+
+                    const chosedPlayer = Number(chosedPlayerInput.id.replace("np", "")) - 2
+
+                    localStorage.setItem("traps", JSON.stringify(traps))
+
+                    if (movType == 0) {
+                        // order[chosedPlayer].currentTile < quantMov ? quantMov = 0 : quantMov
+                        // order[chosedPlayer].currentTile += quantMov // mude isso aqui
+
+                        // movePlayer(chosedPlayer, quantMov, order)
+                        // localStorage.setItem("orderPlayers", JSON.stringify(order))
+                    } else {
+                        // order[chosedPlayer].currentTile += quantMov
+
+                        // movePlayer(chosedPlayer, quantMov, order)
+                        // localStorage.setItem("orderPlayers", JSON.stringify(order))
+                    }
+
+                    trapPopUp.classList.add("hidden")
+                }, { once: true })
                 break
         }
+    }
+
+    function verifyTraps() {
+        const revealedTips = JSON.parse(localStorage.getItem("revealedTips")) || []
+        const traps = JSON.parse(localStorage.getItem("traps")) || []
+
+        if (revealedTips.length === 0 || traps.length === 0) return
+
+        for (let i = 0; i < traps.length; i++) {
+            if (revealedTips.includes(traps[i].idx) && traps[i].isActived === 0) {
+                executeTrap(traps[i].type, traps[i].movType, traps[i].quantMov)
+            }
+        }
+
+        localStorage.setItem("traps", JSON.stringify(traps))
     }
 
     function checkAnswer() {
@@ -281,8 +438,6 @@
         movePlayer(idxPlayer, playerPoints, order);
         movePlayer(idxReader, readerPoints, order);
 
-        // movePlayersOnBoard(idxReader, idxPlayer, readerPoints, playerPoints);
-
         // Calculando o próximo jogador e leitor
         idxReader++
         if (idxReader >= order.length) {
@@ -302,10 +457,10 @@
         localStorage.setItem("questionsOrder", JSON.stringify(questionsOrder))
         localStorage.setItem("orderPlayers", JSON.stringify(order))
 
-        // TODO: Lembrar de apagar as armadilhas
-
-        // Resetar as dicas reveladas e os pontos
+        // Reseta dicas reveladas, armadilhas e os pontos
         localStorage.removeItem("revealedTips")
+        localStorage.removeItem("tipsOrder")
+        localStorage.removeItem("traps")
 
         gameState.points = 10
         localStorage.setItem("points", gameState.points)
