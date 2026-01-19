@@ -57,7 +57,7 @@ function updateVisualPositions(order) {
     }
 }
 
-function movePlayer(idxPlayer, steps, finalOrder) {
+window.movePlayer = function (idxPlayer, steps, finalOrder) {
     const players = getPlayersFromStorage();
 
     players[idxPlayer].currentTile += steps;

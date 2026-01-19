@@ -1,11 +1,11 @@
 ; (function () {
-    window.executeTrap = function (type, movType = 0, quantMov = 10) {
+    window.executeTrap = function (trap) {
         let order = getPlayers().order
         let idxPlayer = getPlayers().player
         let idxReader = getPlayers().reader
         const traps = JSON.parse(localStorage.getItem("traps"))
 
-        switch (type) {
+        switch (trap.type) {
             case 1:
                 // Perdeu a vez
 
@@ -25,28 +25,28 @@
 
                 gameState.actualPlayer = idxPlayer
                 localStorage.setItem("actualPlayer", JSON.stringify(gameState.actualPlayer))
-
-                alert("perdeu a vez")
                 break
             case 2:
                 // Volte ou avance x quantidades de casas
 
-                if (movType == 0) {
-                    order[idxPlayer].currentTile < quantMov ? quantMov = 0 : quantMov
-                    order[idxPlayer].currentTile -= quantMov
+                if (trap.movType == 0) {
+                    order[idxPlayer].currentTile < trap.quantMov ? trap.quantMov = 0 : trap.quantMov
+                    order[idxPlayer].currentTile -= trap.quantMov
 
-                    movePlayer(idxPlayer, quantMov, order)
+                    movePlayer(idxPlayer, trap.quantMov, order)
                     localStorage.setItem("orderPlayers", JSON.stringify(order))
                 } else {
-                    order[idxPlayer].currentTile += quantMov
+                    order[idxPlayer].currentTile += trap.quantMov
 
-                    movePlayer(idxPlayer, quantMov, order)
+                    movePlayer(idxPlayer, trap.quantMov, order)
                     localStorage.setItem("orderPlayers", JSON.stringify(order))
                 }
                 break
 
             case 3:
                 // Escolha alguém para avançar ou voltar x quantidade de casas
+
+                // TODO: O pop up parece mostrar algumas inconsistências
 
                 const divTrap = document.getElementById("trapRadio")
                 const secTrap = document.getElementById("trapPopUp")
@@ -57,10 +57,10 @@
                 if (existingTitle) existingTitle.remove()
 
                 const title = document.createElement("h3")
-                if (movType == 0) {
-                    title.textContent = `Escolha um jogador para voltar ${quantMov} casas.`
+                if (trap.movType == 0) {
+                    title.textContent = `Escolha um jogador para voltar ${trap.quantMov} casas.`
                 } else {
-                    title.textContent = `Escolha um jogador para avançar ${quantMov} casas.`
+                    title.textContent = `Escolha um jogador para avançar ${trap.quantMov} casas.`
                 }
 
                 secTrap.insertBefore(title, divTrap)
@@ -84,6 +84,11 @@
                     }
                 }
 
+                const trapFound = traps.find(t => t.idx === trap.idx)
+
+                trapFound.isActived = 1
+                localStorage.setItem("traps", JSON.stringify(traps))
+
                 const choiceButton = document.getElementById("btnTrap")
 
                 const trapPopUp = document.getElementById("trapPopUp")
@@ -99,39 +104,39 @@
 
                     const chosedPlayer = Number(chosedPlayerInput.id.replace("np", "")) - 2
 
-                    localStorage.setItem("traps", JSON.stringify(traps))
+                    if (trap.movType == 0) {
+                        order[chosedPlayer].currentTile < trap.quantMov ? trap.quantMov = 0 : trap.quantMov
+                        order[chosedPlayer].currentTile -= trap.quantMov
 
-                    if (movType == 0) {
-                         order[chosedPlayer].currentTile < quantMov ? quantMov = 0 : quantMov
-                         order[chosedPlayer].currentTile -= quantMov 
-
-                         movePlayer(chosedPlayer, quantMov, order)
-                         localStorage.setItem("orderPlayers", JSON.stringify(order))
+                        movePlayer(chosedPlayer, trap.quantMov, order)
+                        localStorage.setItem("orderPlayers", JSON.stringify(order))
                     } else {
-                         order[chosedPlayer].currentTile += quantMov
+                        order[chosedPlayer].currentTile += trap.quantMov
 
-                         movePlayer(chosedPlayer, quantMov, order)
-                         localStorage.setItem("orderPlayers", JSON.stringify(order))
+                        movePlayer(chosedPlayer, trap.quantMov, order)
+                        localStorage.setItem("orderPlayers", JSON.stringify(order))
                     }
 
+                    trapFound.isActived = 2
+                    localStorage.setItem("traps", JSON.stringify(traps))
+
                     trapPopUp.classList.add("hidden")
+                    togglePopUp("quizPopUp")
                 }, { once: true })
                 break
         }
     }
 
     window.verifyTraps = function () {
-        const revealedTips = JSON.parse(localStorage.getItem("revealedTips")) || []
         const traps = JSON.parse(localStorage.getItem("traps")) || []
 
-        if (revealedTips.length === 0 || traps.length === 0) return
+        if (traps.length === 0) return
 
         for (let i = 0; i < traps.length; i++) {
-            if (revealedTips.includes(traps[i].idx) && traps[i].isActived === 0) {
-                executeTrap(traps[i].type, traps[i].movType, traps[i].quantMov)
+            if (traps[i].isActived === 1) {
+                executeTrap(traps[i])
+                return
             }
         }
-
-        localStorage.setItem("traps", JSON.stringify(traps))
     }
 })();

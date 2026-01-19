@@ -14,13 +14,13 @@
         const idxReader = playerData.reader
         const points = playerData.points
 
-        if(outputPlayerAnswering) outputPlayerAnswering.textContent = playerData.order[idxPlayer].name
-        if(outputPlayerReading) outputPlayerReading.textContent = playerData.order[idxReader].name
-        if(outputPoints) outputPoints.textContent = points
-        if(outputCategory) outputCategory.textContent = question.Categoria
-        if(outputResponse) outputResponse.textContent = question.Resposta
+        if (outputPlayerAnswering) outputPlayerAnswering.textContent = playerData.order[idxPlayer].name
+        if (outputPlayerReading) outputPlayerReading.textContent = playerData.order[idxReader].name
+        if (outputPoints) outputPoints.textContent = points
+        if (outputCategory) outputCategory.textContent = question.Categoria
+        if (outputResponse) outputResponse.textContent = question.Resposta
 
-        if(outputResponse) {
+        if (outputResponse) {
             outputResponse.addEventListener("click", () => {
                 outputResponse.classList.remove("oculto")
             })
@@ -90,7 +90,7 @@
 
                 if (type === 3) {
                     // trap.movType = Math.floor(Math.random() * 2)
-                    trap.movType = 0
+                    trap.movType = 1
                     // trap.quantMov = Math.floor(Math.random() * 10) + 1
                     trap.quantMov = 10
                     trap.isActived = 0
@@ -133,11 +133,10 @@
                     break
             }
 
-            if (!revealedTips.includes(trap.idx)) {
-                hint.addEventListener("click", () => {
-                    executeTrap(trap.type, trap.movType, trap.quantMov)
-                }, { once: true })
-            }
+            hint.addEventListener("click", () => {
+                executeTrap(trap)
+            }, { once: true })
         })
+
     }
 })();
