@@ -75,8 +75,7 @@
             const trapsIdx = totalTips.slice(0, 3)
 
             traps = trapsIdx.map(index => {
-                // const type = Math.floor(Math.random() * 3) + 1
-                const type = 3
+                const type = Math.floor(Math.random() * 3) + 1
 
                 const trap = {
                     idx: index,
@@ -89,10 +88,8 @@
                 }
 
                 if (type === 3) {
-                    // trap.movType = Math.floor(Math.random() * 2)
-                    trap.movType = 1
-                    // trap.quantMov = Math.floor(Math.random() * 10) + 1
-                    trap.quantMov = 10
+                    trap.movType = Math.floor(Math.random() * 2)
+                    trap.quantMov = Math.floor(Math.random() * 10) + 1
                     trap.isActived = 0
                 }
 
@@ -110,8 +107,6 @@
         traps.forEach(trap => {
             const hint = hints[trap.idx]
             if (!hint) return
-
-            const revealedTips = JSON.parse(localStorage.getItem("revealedTips")) || []
 
             switch (trap.type) {
                 case 1:
