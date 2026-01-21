@@ -125,4 +125,19 @@
         gameState.points = 10
         localStorage.setItem("points", gameState.points)
     }
+
+    window.endGame = function (){
+        const winner = document.getElementById("winner")
+        winner.textContent = "TESTE"
+
+        const players = JSON.parse(localStorage.getItem("orderPlayers"))
+        const tileList = document.getElementById("tileList")
+
+        for(let i = 0; i < players.length; i++){
+            const li = document.createElement("li")
+            li.textContent = `${players[i].name} na casa ${players[i].currentTile}`
+            
+            tileList.appendChild(li)
+        }
+    }
 })();

@@ -65,7 +65,9 @@ window.movePlayer = function (idxPlayer, steps, finalOrder) {
     if (players[idxPlayer].currentTile >= tileCoordinates.length - 1) {
         players[idxPlayer].currentTile = tileCoordinates.length - 1;
 
-        //TODO: chamar a funçao de final de jogo
+        // TODO: chamar popUp?
+        location.href = "../pages/endGame.html"
+        // endGame()
     }
 
     if (players[idxPlayer].currentTile < 0) {
