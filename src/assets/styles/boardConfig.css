@@ -1,0 +1,25 @@
+#tabuleiro-container {
+    position: relative;
+    display: inline-block;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+    height: 100dvh;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#board-image {
+    width: 100%;
+    display: block;
+}
